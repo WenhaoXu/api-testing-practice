@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 
+import static org.hamcrest.core.IsEqual.equalTo;
+import static sun.nio.cs.Surrogate.is;
+
 public class RestAssuredExercises5Test {
 
 	private static RequestSpecification requestSpec;
@@ -29,11 +32,11 @@ public class RestAssuredExercises5Test {
 	
 	@Test
 	public void checkThirdSpeedRecordWasSetIn1955() {
-		
 		given().
 			spec(requestSpec).
-		when().
-		then();
+		when().get("/xml/speedrecords").
+		then().
+				body("speedRecords.car[2].year",equalTo(1955));
 	}
 	
 	/*******************************************************
@@ -48,7 +51,7 @@ public class RestAssuredExercises5Test {
 		
 		given().
 			spec(requestSpec).
-		when().
+		when().get("/xml/speedrecords").
 		then();
 	}
 	

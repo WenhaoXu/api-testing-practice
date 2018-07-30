@@ -66,7 +66,7 @@ public class RestAssuredExercises2Test {
 		
 		given().
 			spec(requestSpec).
-		when().
+		when().get("/circuits/monza.json").
 		then();
 	}
 	
