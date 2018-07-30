@@ -3,11 +3,13 @@ package exercises;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.hamcrest.core.IsNot;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
 import static org.hamcrest.collection.IsArrayWithSize.arrayWithSize;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -113,8 +115,7 @@ public class RestAssuredExercises1Test {
 
         given().
                 spec(requestSpec).
-                when().
-
-                then();
+                when().get("/2014/circuits.json").
+                then().log().all();
     }
 }

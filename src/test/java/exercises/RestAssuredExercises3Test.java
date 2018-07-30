@@ -1,12 +1,14 @@
 package exercises;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 public class RestAssuredExercises3Test {
 
@@ -42,7 +44,10 @@ public class RestAssuredExercises3Test {
 
 
     static void createResponseSpecification() {
-
+        responseSpec=   given().
+                spec(requestSpec).
+                when().
+                then().statusCode(200).and().contentType(ContentType.JSON).and().body("MRData.CircuitTable.Circuits.circuitName[0]",equalTo("Albert Park Grand Prix Circuit"));
 
     }
 
@@ -57,7 +62,8 @@ public class RestAssuredExercises3Test {
 
 
     static void getNinthDriverId() {
-
+        ninthDriverId=given().spec(requestSpec).
+                when().get("/2016/drivers.json").then().toString();
 
     }
 
@@ -71,11 +77,11 @@ public class RestAssuredExercises3Test {
 
     @Test
     public void useResponseSpecification() {
-
         given().
                 spec(requestSpec).
                 when().
-                then();
+                then().spec(responseSpec);
+
     }
 
     /*******************************************************

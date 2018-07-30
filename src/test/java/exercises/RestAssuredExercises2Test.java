@@ -4,8 +4,10 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 
 public class RestAssuredExercises2Test {
@@ -30,6 +32,15 @@ public class RestAssuredExercises2Test {
 	 ******************************************************/
 
 	//todo
+	@Test
+	@ParameterizedTest
+	public void check() {
+
+		given().queryParam("country", "Italy").
+				spec(requestSpec).
+				when().get("/circuits/monza.json").
+				then().body("MRData.CircuitTable.Circuits[0].circuitId",equalTo("Monza"));
+	}
 
 	/*******************************************************
 	 * Use junit-jupiter-params for @ParameterizedTest that specifies for all races
