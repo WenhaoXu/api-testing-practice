@@ -52,7 +52,7 @@ public class RestAssuredExercises5Test {
 		given().
 			spec(requestSpec).
 		when().get("/xml/speedrecords").
-		then();
+		then().body("speedRecords.car[3].@make",equalTo("Aston Martin"));
 	}
 	
 	/*******************************************************
