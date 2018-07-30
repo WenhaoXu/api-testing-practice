@@ -5,10 +5,15 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.stream.Stream;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 
 public class RestAssuredExercises2Test {
@@ -34,14 +39,11 @@ public class RestAssuredExercises2Test {
 
 	//todo
 
-	@ParameterizedTest
-	@ValueSource(strings={"Italy-Monza"})
-	public void check(String params) {
-        String [] param=params.split("-");
-		given().
-				spec(requestSpec).
-				when().get("/circuits/monza.json").
-				then().body("MRData.CircuitTable.Circuits[0].Location.country",equalTo(param[0])).body("MRData.CircuitTable.Circuits[0].Location.locality",equalTo(param[1]));
+	static Stream<Arguments> generateCheckCountryForCircuit(){
+		return Stream.of(
+				Arguments.of("monza", "Italy"),
+				Arguments.of("spa", "Belgium")
+		);
 	}
 
 	/*******************************************************
@@ -52,7 +54,14 @@ public class RestAssuredExercises2Test {
 	 ******************************************************/
 
 	//todo
-     @ParameterizedTest
+	static Stream<Arguments> buildCheckNumberOfPitstopsForMaxVerstappenIn2015(){
+		return Stream.of(
+				Arguments.of(1, 1),
+				Arguments.of(2, 3),
+				Arguments.of(3, 2),
+				Arguments.of(4, 2)
+		);
+	}
 
 
 	/*******************************************************
@@ -60,14 +69,18 @@ public class RestAssuredExercises2Test {
 	 * is /circuits/monza.json)
 	 * and check the country this circuit can be found in
 	 ******************************************************/
-	
-	@Test
-	public void checkCountryForCircuit() {
-		
+
+	@ParameterizedTest
+	@MethodSource("generateCheckCountryForCircuit")
+	public void checkCountryForCircuit(String circuitId, String country) {
+
 		given().
-			spec(requestSpec).
-		when().get("/circuits/monza.json").
-		then();
+				spec(requestSpec).
+				when().
+				get("/circuits/" + circuitId + ".json").
+				then().
+				body("MRData.CircuitTable.Circuits[0].Location.country", is(country)).log().all();
+
 	}
 	
 	/*******************************************************
@@ -76,13 +89,16 @@ public class RestAssuredExercises2Test {
 	 * /2015/1/drivers/max_verstappen/pitstops.json)
 	 * and verify the number of pit stops made
 	 ******************************************************/
-	
-	@Test
-	public void checkNumberOfPitstopsForMaxVerstappenIn2015() {
-		
+
+	@ParameterizedTest
+	@MethodSource("generateCheckNumberOfPitstopsForMaxVerstappenIn2015Param")
+	public void checkNumberOfPitstopsForMaxVerstappenIn2015(int seq, int stopNums) {
+
 		given().
-			spec(requestSpec).
-		when().
-		then();
+				spec(requestSpec).
+				when().
+				get("/2015/" + seq + "/drivers/max_verstappen/pitstops.json").
+				then()
+				.body("MRData.RaceTable.Races[0].PitStops.size()", is(stopNums));
 	}
 }

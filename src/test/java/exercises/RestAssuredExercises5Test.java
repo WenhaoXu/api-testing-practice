@@ -100,6 +100,6 @@ public class RestAssuredExercises5Test {
 		given().
 			spec(requestSpec).
 		when().get("/xml/speedrecords").
-		then();
+		then().body("speedRecords.car.findAll{it.@make=='Italy'}.size()",equalTo(2));
 	}
 }
