@@ -2,6 +2,8 @@ package exercises;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.internal.mapping.Jackson1Mapper;
+import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.junit.jupiter.api.BeforeAll;
@@ -55,7 +57,7 @@ public class RestAssuredExercises3Test {
      * Retrieve the list of 2016 Formula 1 drivers and store
      * the driverId for the ninth mentioned driver in a
      * static String variable
-     * Use /2016/drivers.json
+     * Use 2016/drivers.json/
      ******************************************************/
 
     private static String ninthDriverId;
@@ -94,9 +96,9 @@ public class RestAssuredExercises3Test {
     @Test
     public void useExtractedDriverId() {
 
-        given().
+        given().pathParam("driverId",ninthDriverId).
                 spec(requestSpec).
-                when().
-                then();
+                when().get("/drivers/{driverId}.json").
+                then().log().all();
     }
 }

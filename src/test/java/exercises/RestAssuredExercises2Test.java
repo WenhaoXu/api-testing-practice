@@ -5,6 +5,7 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -32,24 +33,27 @@ public class RestAssuredExercises2Test {
 	 ******************************************************/
 
 	//todo
-	@Test
-	@ParameterizedTest
-	public void check() {
 
-		given().queryParam("country", "Italy").
+	@ParameterizedTest
+	@ValueSource(strings={"Italy-Monza"})
+	public void check(String params) {
+        String [] param=params.split("-");
+		given().
 				spec(requestSpec).
 				when().get("/circuits/monza.json").
-				then().body("MRData.CircuitTable.Circuits[0].circuitId",equalTo("Monza"));
+				then().body("MRData.CircuitTable.Circuits[0].Location.country",equalTo(param[0])).body("MRData.CircuitTable.Circuits[0].Location.locality",equalTo(param[1]));
 	}
 
 	/*******************************************************
-	 * Use junit-jupiter-params for @ParameterizedTest that specifies for all races
-	 * (adding the first four suffices) in 2015 how many  
-	 * pit stops Max Verstappen made
+	 * 	 * Use junit-jupiter-params for @ParameterizedTest that specifies for all races
+	 * 	 * (adding the first four suffices) in 2015 how many
+	 * 	 * pit stops Max Verstappen made
 	 * (race 1 = 1 pitstop, 2 = 3, 3 = 2, 4 = 2)
 	 ******************************************************/
 
 	//todo
+     @ParameterizedTest
+
 
 	/*******************************************************
 	 * Request data for a specific circuit (for Monza this 
