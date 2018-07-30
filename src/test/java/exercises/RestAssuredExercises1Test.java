@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
 
 public class RestAssuredExercises1Test {
@@ -77,8 +78,8 @@ public class RestAssuredExercises1Test {
 
         given().
                 spec(requestSpec).
-                when().
-                then();
+                when().get("/2014/1/circuits.json").
+                then().body("MRData.CircuitTable.Circuits[0].circuitId",equalTo("albert_park"));
     }
 
     /***********************************************
