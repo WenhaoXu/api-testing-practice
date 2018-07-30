@@ -46,8 +46,8 @@ public class RestAssuredExercises1Test {
 
         given().
                 spec(requestSpec).
-                when().
-                then();
+                when().get("/incorrect.json").
+                then().and().statusCode(404);
     }
 
     /*******************************************************
